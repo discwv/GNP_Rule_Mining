@@ -8,6 +8,8 @@ using namespace std;
 using namespace cv;
 
 Mat Color8to4(Mat image);
+void GenerateStats();
+void G(string name, ofstream out);
 
 int main()
 {
@@ -66,5 +68,28 @@ Mat Color8to4(Mat image)
 
 void GenerateStats()
 {
+	int start = 0;
+	int end = 5;
+	string filename = "stats_" + to_string(start) + "_" + to_string(end) + ".csv";
+	ofstream myout;
+	myout.open(filename);
+	myout << "image,step,varience,entropy,energy,homogeneity,3moment" << endl;
+	for (int i = start; i <= end; i++)
+	{
+		string leftname = to_string(i) + "_left.jpeg";
+		string rightname = to_string(i) + "_right.jpeg";
+		G(leftname, &myout);
+		G(rightname, &myout);
+	}
+	myout.close();
+}
 
+void G(string name, ofstream* out)
+{
+	Mat im_gray = imread(name, CV_LOAD_IMAGE_GRAYSCALE);
+	im_gray = Color8to4(im_gray);
+	Size si = Size(500, 333);
+	resize(im_gray, im_gray, si);
+	double** myGlcm = MakeGLCM(im_gray, 3);
+	*out << name << "," << Sav_Step(myGlcm) << "," << Sav_Varience(myGlcm) << "," << Sav_Entropy(myGlcm) << "," << Sav_Energy(myGlcm) << "," << Sav_Homogeneity(myGlcm) << "," << Sav_3Moment(myGlcm) << endl;
 }
