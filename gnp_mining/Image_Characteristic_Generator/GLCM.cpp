@@ -1,5 +1,5 @@
 #include "GLCM.h"
-#include <iostream>
+//#include <iostream>
 #include <cmath>
 using namespace cv;
 
@@ -28,7 +28,7 @@ double** MakeGLCM(Mat image, int radius)
 			myGlcm[image.at<uchar>(row, col)][image.at<uchar>(row, col)]--;
 			count += ((2 * radius + 1) * (2 * radius + 1)) - 1;
 		}
-		std::cout << row << std::endl;
+		//std::cout << row << std::endl;
 	}
 
 	//	Remove 0 rows (boundary of cornea image)
