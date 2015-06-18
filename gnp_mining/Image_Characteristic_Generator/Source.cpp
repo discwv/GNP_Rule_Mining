@@ -18,9 +18,24 @@ int main()
 	Mat im2 = gnp_m::ExtractChannel(im, 1);
 	Mat small;
 	Size si = Size(500, 333);
+	
 	resize(im2, im2, si);
+	Mat fovmask = gnp_m::FindFOVMask(im2);
+	//resize (fovmask, fovmask, si);
+	for (int row = 0; row < im2.rows; row++)
+	{
+		for (int col = 0; col < im2.cols; col++)
+		{
+			if (fovmask.at<uchar>(row, col) == 0)
+			{
+				im2.at<uchar>(row, col) = 255;
+			}
+		}
+	}
 	namedWindow("green", WINDOW_AUTOSIZE);
-	imshow("green",im2);
+	imshow("green", im2);
+	namedWindow("fov", WINDOW_AUTOSIZE);
+	imshow("fov", fovmask);
 	waitKey(30);
 	int what;
 	cin >> what;
