@@ -7,10 +7,13 @@
 namespace gnp_m
 {
 	cv::Mat FindFOVMask(cv::Mat input);
+	cv::Mat MakeGradientImage(cv::Mat input);
 	cv::Mat FindFoviaMask(cv::Mat input);
 	cv::Mat FindOpticDiskMask(cv::Mat input);
 	cv::Mat ExtractChannel(cv::Mat input, int channel);
 	cv::Mat FindVesselMask(cv::Mat input);
 	cv::Mat SubtractVesselMap(cv::Mat input, cv::Mat vesselMap);
+	void ErodeMap(cv::Mat input, int radius);
+	cv::Mat FindHueMask(cv::Mat input);
 }
 #endif
