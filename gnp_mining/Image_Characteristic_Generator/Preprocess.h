@@ -14,6 +14,6 @@ namespace gnp_m
 	cv::Mat FindVesselMask(cv::Mat input);
 	cv::Mat SubtractVesselMap(cv::Mat input, cv::Mat vesselMap);
 	void ErodeMap(cv::Mat input, int radius);
-	cv::Mat FindHueMask(cv::Mat input);
+	cv::Mat FindHueMask(cv::Mat input, cv::Mat mask);
 }
 #endif

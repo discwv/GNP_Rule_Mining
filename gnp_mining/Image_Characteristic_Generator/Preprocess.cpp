@@ -5,7 +5,7 @@ using namespace cv;
 
 Mat gnp_m::ExtractChannel(Mat input, int channel)
 {
-	Mat newmat(input.rows, input.cols, input.type());
+	Mat newmat(input.rows, input.cols, CV_8UC1);
 	Mat out[] = { newmat };
 	int from_to[] = { channel, 0 };
 	mixChannels(&input, 1, out, 1, from_to, 1);
@@ -50,15 +50,15 @@ Mat gnp_m::MakeGradientImage(Mat input)
 	return out;
 }
 
-Mat gnp_m::FindHueMask(Mat input)
+Mat gnp_m::FindHueMask(Mat input, Mat mask)
 {
 	Mat huemat(input.size(), input.type());
 	cvtColor(input, huemat, CV_RGB2HSV);
 	Mat justhue = gnp_m::ExtractChannel(huemat, 0);
 	Mat meanarr, stddevarr;
-	meanStdDev(justhue, meanarr, stddevarr);
+	meanStdDev(justhue, meanarr, stddevarr, mask);
 	double thresh = meanarr.at<double>(0) + stddevarr.at<double>(0);
-	Mat out(justhue.size(), input.type());
+	Mat out(justhue.size(), justhue.type());
 	for (int row = 0; row < justhue.rows; row++)
 	{
 		for (int col = 0; col < justhue.cols; col++)

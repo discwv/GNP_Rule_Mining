@@ -14,19 +14,21 @@ void G(string name, ofstream* out);
 
 int main()
 {
-	Mat im = imread("5_right.jpeg");
+	Mat im = imread("4_left.jpeg");
 	Mat im2 = gnp_m::ExtractChannel(im, 1);
 	Mat small;
 	Size si = Size(500, 333);
-	
-	resize(im2, im2, si);
 	Mat fovmask = gnp_m::FindFOVMask(im2);
-	//resize (fovmask, fovmask, si);
+	gnp_m::ErodeMap(fovmask, 6);
+	Mat huemask = gnp_m::FindHueMask(im, fovmask);
+	resize(im2, im2, si);
+	resize(huemask, huemask, si);
+	resize (fovmask, fovmask, si);
 	for (int row = 0; row < im2.rows; row++)
 	{
 		for (int col = 0; col < im2.cols; col++)
 		{
-			if (fovmask.at<uchar>(row, col) == 0)
+			if (fovmask.at<uchar>(row, col) == 0 || huemask.at<uchar>(row,col) == 0)
 			{
 				im2.at<uchar>(row, col) = 255;
 			}
@@ -34,8 +36,8 @@ int main()
 	}
 	namedWindow("green", WINDOW_AUTOSIZE);
 	imshow("green", im2);
-	namedWindow("fov", WINDOW_AUTOSIZE);
-	imshow("fov", fovmask);
+	namedWindow("hue", WINDOW_AUTOSIZE);
+	imshow("hue", huemask);
 	waitKey(30);
 	int what;
 	cin >> what;
